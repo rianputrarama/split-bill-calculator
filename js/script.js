@@ -14,6 +14,21 @@ addPersonButton.addEventListener('click', addPerson);
 splitBillForm.addEventListener('submit', calculateSplit);
 resetButton.addEventListener('click', resetForm);
 
+// Format rupiah input real-time
+totalBillAmountInput.addEventListener('input', function() {
+  let value = this.value;
+  
+  // Hapus semua non-digit dan dot
+  value = value.replace(/[^\d]/g, '');
+  
+  if (value.length > 0) {
+    // Format dengan dot setiap 3 digit
+    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+  
+  this.value = value;
+});
+
 // Add new person input field
 function addPerson(e) {
   e.preventDefault();
@@ -33,7 +48,9 @@ function addPerson(e) {
 function calculateSplit(e) {
   e.preventDefault();
   
-  const totalBill = parseFloat(totalBillAmountInput.value);
+// Remove formatting before parse
+const totalBillValue = totalBillAmountInput.value.replace(/\./g, '');
+const totalBill = parseFloat(totalBillValue) || 0;
   const personInputs = document.querySelectorAll('.personName');
   
   // Validate
