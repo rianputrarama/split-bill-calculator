@@ -1,7 +1,6 @@
 /* Navbar */
 .navbar {
   padding: 0;
-  position: sticky;
   top: 0;
   z-index: 100;
   box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
@@ -163,18 +162,18 @@ button {
   transition: all 0.3s ease;
 }
 
-#addPersonButton {
+#addPersonButton, #addCustomPersonButton {
   background-color: #4CAF50;
   color: white;
 }
 
-#addPersonButton:hover {
+#addPersonButton:hover, #addCustomPersonButton:hover {
   background-color: #45a049;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
 }
 
-#addPersonButton:active {
+#addPersonButton:active, #addCustomPersonButton:active {
   transform: translateY(0);
 }
 
@@ -193,18 +192,18 @@ button[type="submit"]:active {
   transform: translateY(0);
 }
 
-#resetButton {
+#resetButton, #customResetButton {
   background-color: #f44336;
   color: white;
 }
 
-#resetButton:hover {
+#resetButton:hover, #customResetButton:hover {
   background-color: #da190b;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
 }
 
-#resetButton:active {
+#resetButton:active, #customResetButton:active {
   transform: translateY(0);
 }
 
@@ -266,4 +265,45 @@ button[type="submit"]:active {
   #result {
     padding: 15px;
   }
+}
+
+.form-section {
+  display: block;
+}
+
+.form-section.hidden {
+  display: none;
+}
+
+#customResult {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-left: 4px solid #667eea;
+  border-radius: 6px;
+  display: none;
+}
+
+#customResult.show {
+  display: block;
+  animation: slideIn 0.3s ease;
+}
+
+#customResult h2 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 1.3rem;
+}
+
+#customResult p {
+  margin: 8px 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+#customResult h3 {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 1.1rem;
 }

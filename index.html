@@ -18,6 +18,8 @@
         </nav>
     </div>
     </header>
+    <!-- Equal Split Form -->
+    <div id="equalSplit" class="form-section">
     <form id="splitBillForm">
         <label for="totalBillAmount">Total Bill Amount:</label>
         <input type="text" id="totalBillAmount" name="totalBillAmount" placeholder="Enter amount" required>
@@ -34,5 +36,28 @@
         <br><br>
         <div id="result"></div>
     </form>
+    </div>
+    <!-- Custom Split Form -->
+    <div id="customSplit" class="form-section hidden">
+    <form id="customSplitForm">
+        <label for="customTotalBill">Total Bill Amount:</label>
+        <input type="text" id="customTotalBill" name="customTotalBill" placeholder="Enter amount" required>
+        
+        <div id="customPeopleContainer">
+        <div class="person-input">
+            <label for="customPerson0">Person 1:</label>
+            <input type="text" id="customPerson0" class="customPersonName" placeholder="Enter name" required>
+            <label for="customAmount0">Amount:</label>
+            <input type="text" id="customAmount0" class="customPersonAmount" placeholder="Enter amount" required>
+        </div>
+        </div>
+        
+        <button type="button" id="addCustomPersonButton">Add Person</button>
+        <button type="submit">Calculate</button>
+        <button type="button" id="customResetButton">Reset</button>
+        
+        <div id="customResult"></div>
+    </form>
+    </div>
 </body>
 </html>
