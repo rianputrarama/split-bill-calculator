@@ -9,7 +9,15 @@
 </head>
 <body>
     <h1 class="title">Split Bill Calculator</h1>
-    <br><br>
+    <header class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-logo"></div>
+        <nav class="navbar-menu">
+        <a href="#" class="nav-link active" data-page="equal">Equal Split</a>
+        <a href="#" class="nav-link" data-page="custom">Custom Split</a>
+        </nav>
+    </div>
+    </header>
     <form id="splitBillForm">
         <label for="totalBillAmount">Total Bill Amount:</label>
         <input type="text" id="totalBillAmount" name="totalBillAmount" placeholder="Enter amount" required>
