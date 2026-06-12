@@ -28,8 +28,13 @@
         <br><br>
         <div id="peopleContainer">
             <div class="person-input">
-                <label for="person0">Person 1:</label>
-                <input type="text" id="person0" class="personName" placeholder="Enter name" required>
+                <div>
+                <div>
+                    <label for="person0">Person 1:</label>
+                    <input type="text" id="person0" class="personName" placeholder="Enter name" required>
+                </div>
+                <button type="button" class="deletePersonButton" style="background-color: #f44336; color: white; padding: 8px 12px; margin-left: 10px;">×</button>
+                </div>
             </div>
         </div>
         <button type="button" id="addPersonButton">Add Person</button>
@@ -45,12 +50,17 @@
         <label for="customTotalBill">Total Bill Amount:</label>
         <input type="text" id="customTotalBill" name="customTotalBill" placeholder="Enter amount" required>
         
-        <div id="customPeopleContainer">
+       <div id="customPeopleContainer">
         <div class="person-input">
-            <label for="customPerson0">Person 1:</label>
-            <input type="text" id="customPerson0" class="customPersonName" placeholder="Enter name" required>
-            <label for="customAmount0">Amount:</label>
-            <input type="text" id="customAmount0" class="customPersonAmount" placeholder="Enter amount" required>
+            <div>
+            <div>
+                <label for="customPerson0">Person 1:</label>
+                <input type="text" id="customPerson0" class="customPersonName" placeholder="Enter name" required>
+                <label for="customAmount0">Amount:</label>
+                <input type="text" id="customAmount0" class="customPersonAmount" placeholder="Enter amount" required>
+            </div>
+            <button type="button" class="deletePersonButton" style="background-color: #f44336; color: white; padding: 8px 12px; margin-left: 10px;">×</button>
+            </div>
         </div>
         </div>
         

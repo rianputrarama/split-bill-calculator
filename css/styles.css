@@ -307,3 +307,40 @@ button[type="submit"]:active {
   color: #333;
   font-size: 1.1rem;
 }
+
+.person-input > div {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.person-input > div > div:first-child {
+  flex: 1;
+}
+
+.person-input > div > div:first-child > input:first-of-type {
+  margin-bottom: 0;
+}
+
+.deletePersonButton {
+  background-color: #f44336 !important;
+  color: white !important;
+  padding: 10px 12px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-size: 1.2rem !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  margin-top: 43px !important;
+  flex-shrink: 0;
+}
+
+.deletePersonButton:hover {
+  background-color: #da190b !important;
+  transform: translateY(-2px) !important;
+}

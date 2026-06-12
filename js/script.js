@@ -58,6 +58,19 @@ totalBillAmountInput.addEventListener('input', function() {
   this.value = value;
 });
 
+// Delete button for default equal split person
+const defaultEqualDeleteBtn = document.querySelector('#peopleContainer .deletePersonButton');
+if (defaultEqualDeleteBtn) {
+  defaultEqualDeleteBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (document.querySelectorAll('.personName').length > 1) {
+      this.closest('.person-input').remove();
+    } else {
+      alert('Must have at least one person');
+    }
+  });
+}
+
 // Add new person input field
 function addPerson(e) {
   e.preventDefault();
@@ -65,11 +78,28 @@ function addPerson(e) {
   const personInput = document.createElement('div');
   personInput.className = 'person-input';
   personInput.innerHTML = `
-    <label for="person${personCount}">Person ${personCount + 1}:</label>
-    <input type="text" id="person${personCount}" class="personName" placeholder="Enter name" required>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <div style="flex: 1;">
+        <label for="person${personCount}">Person ${personCount + 1}:</label>
+        <input type="text" id="person${personCount}" class="personName" placeholder="Enter name" required>
+      </div>
+      <button type="button" class="deletePersonButton" style="background-color: #f44336; color: white; padding: 8px 12px; margin-top: 25px; margin-left: 10px;">×</button>
+    </div>
   `;
   
   peopleContainer.appendChild(personInput);
+  
+  // Add delete button listener
+  const deleteBtn = personInput.querySelector('.deletePersonButton');
+  deleteBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (document.querySelectorAll('.personName').length > 1) {
+      personInput.remove();
+    } else {
+      alert('Must have at least one person');
+    }
+  });
+  
   personCount++;
 }
 
@@ -77,9 +107,9 @@ function addPerson(e) {
 function calculateSplit(e) {
   e.preventDefault();
   
-// Remove formatting before parse
-const totalBillValue = totalBillAmountInput.value.replace(/\./g, '');
-const totalBill = parseFloat(totalBillValue) || 0;
+  // Remove formatting before parse
+  const totalBillValue = totalBillAmountInput.value.replace(/\./g, '');
+  const totalBill = parseFloat(totalBillValue) || 0;
   const personInputs = document.querySelectorAll('.personName');
   
   // Validate
@@ -120,6 +150,14 @@ names.forEach(name => {
   // Display result
   resultDiv.innerHTML = resultHTML;
   resultDiv.classList.add('show');
+
+  // Add export button
+  resultDiv.innerHTML += `<button type="button" id="exportPdfButton" style="background-color: #FF9800; margin-top: 15px;">Export to PDF</button>`;
+  
+  // Add event listener to export button
+  document.getElementById('exportPdfButton').addEventListener('click', function() {
+    exportEqualSplitPDF(names, splitAmount, totalBill);
+  });
 }
 
 // Reset form
@@ -134,10 +172,28 @@ function resetForm(e) {
   // Reset person inputs (keep only first one)
   peopleContainer.innerHTML = `
     <div class="person-input">
-      <label for="person0">Person 1:</label>
-      <input type="text" id="person0" class="personName" placeholder="Enter name" required>
+      <div>
+        <div>
+          <label for="person0">Person 1:</label>
+          <input type="text" id="person0" class="personName" placeholder="Enter name" required>
+        </div>
+        <button type="button" class="deletePersonButton">×</button>
+      </div>
     </div>
   `;
+  
+  // Add delete listener untuk default person
+  const defaultDeleteBtn = document.querySelector('#peopleContainer .deletePersonButton');
+  if (defaultDeleteBtn) {
+    defaultDeleteBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (document.querySelectorAll('.personName').length > 1) {
+        this.closest('.person-input').remove();
+      } else {
+        alert('Must have at least one person');
+      }
+    });
+  }
   
   personCount = 1;
 }
@@ -168,6 +224,19 @@ if (defaultCustomAmount) {
   });
 }
 
+// Delete button for default person
+const defaultDeleteBtn = document.querySelector('#customPeopleContainer .deletePersonButton');
+if (defaultDeleteBtn) {
+  defaultDeleteBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (document.querySelectorAll('.customPersonName').length > 1) {
+      this.closest('.person-input').remove();
+    } else {
+      alert('Must have at least one person');
+    }
+  });
+}
+
 // Event Listeners for Custom Split
 addCustomPersonButton.addEventListener('click', addCustomPerson);
 customSplitForm.addEventListener('submit', calculateCustomSplit);
@@ -192,10 +261,15 @@ function addCustomPerson(e) {
   const personInput = document.createElement('div');
   personInput.className = 'person-input';
   personInput.innerHTML = `
-    <label for="customPerson${customPersonCount}">Person ${customPersonCount + 1}:</label>
-    <input type="text" id="customPerson${customPersonCount}" class="customPersonName" placeholder="Enter name" required>
-    <label for="customAmount${customPersonCount}">Amount:</label>
-    <input type="text" id="customAmount${customPersonCount}" class="customPersonAmount" placeholder="Enter amount" required>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <div style="flex: 1;">
+        <label for="customPerson${customPersonCount}">Person ${customPersonCount + 1}:</label>
+        <input type="text" id="customPerson${customPersonCount}" class="customPersonName" placeholder="Enter name" required>
+        <label for="customAmount${customPersonCount}">Amount:</label>
+        <input type="text" id="customAmount${customPersonCount}" class="customPersonAmount" placeholder="Enter amount" required>
+      </div>
+      <button type="button" class="deletePersonButton" style="background-color: #f44336; color: white; padding: 8px 12px; margin-top: 25px; margin-left: 10px;">×</button>
+    </div>
   `;
   
   customPeopleContainer.appendChild(personInput);
@@ -211,6 +285,13 @@ function addCustomPerson(e) {
     }
     
     this.value = value;
+  });
+  
+  // Add delete button listener
+  const deleteBtn = personInput.querySelector('.deletePersonButton');
+  deleteBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    personInput.remove();
   });
   
   customPersonCount++;
@@ -270,8 +351,10 @@ function calculateCustomSplit(e) {
   // Find min and max
   const maxAmount = Math.max(...customAmounts);
   const minAmount = Math.min(...customAmounts);
-  const maxPerson = customNames[customAmounts.indexOf(maxAmount)];
-  const minPerson = customNames[customAmounts.indexOf(minAmount)];
+  // Find all people with max amount
+  const maxPersons = customNames.filter((name, index) => customAmounts[index] === maxAmount).join(' & ');
+  // Find all people with min amount
+  const minPersons = customNames.filter((name, index) => customAmounts[index] === minAmount).join(' & ');
   
   // Generate result HTML
   let resultHTML = `<h2>Bill Split Result</h2>`;
@@ -287,12 +370,20 @@ function calculateCustomSplit(e) {
   // Add min/max summary
   resultHTML += `<hr style="margin: 15px 0; border: none; border-top: 1px solid #ddd;">`;
   resultHTML += `<h3 style="margin-top: 15px; margin-bottom: 10px;">Summary:</h3>`;
-  resultHTML += `<p>💰 <strong>Most Expensive:</strong> ${maxPerson} (Rp${Math.round(maxAmount).toLocaleString('id-ID')})</p>`;
-  resultHTML += `<p>💸 <strong>Cheapest:</strong> ${minPerson} (Rp${Math.round(minAmount).toLocaleString('id-ID')})</p>`;
+  resultHTML += `<p>💰 <strong>Most Expensive:</strong> ${maxPersons} (Rp${Math.round(maxAmount).toLocaleString('id-ID')})</p>`;
+  resultHTML += `<p>💸 <strong>Cheapest:</strong> ${minPersons} (Rp${Math.round(minAmount).toLocaleString('id-ID')})</p>`;
   
   // Display result
   customResultDiv.innerHTML = resultHTML;
   customResultDiv.classList.add('show');
+
+  // Add export button
+  customResultDiv.innerHTML += `<button type="button" id="exportCustomPdfButton" style="background-color: #FF9800; margin-top: 15px;">Export to PDF</button>`;
+  
+  // Add event listener to export button
+  document.getElementById('exportCustomPdfButton').addEventListener('click', function() {
+    exportCustomSplitPDF(customNames, customAmounts, customTotalBill, maxPerson, maxAmount, minPerson, minAmount);
+  });
 }
 
 // Reset custom form
@@ -305,12 +396,183 @@ function resetCustomForm(e) {
   
   customPeopleContainer.innerHTML = `
     <div class="person-input">
-      <label for="customPerson0">Person 1:</label>
-      <input type="text" id="customPerson0" class="customPersonName" placeholder="Enter name" required>
-      <label for="customAmount0">Amount:</label>
-      <input type="text" id="customAmount0" class="customPersonAmount" placeholder="Enter amount" required>
+      <div>
+        <div>
+          <label for="customPerson0">Person 1:</label>
+          <input type="text" id="customPerson0" class="customPersonName" placeholder="Enter name" required>
+          <label for="customAmount0">Amount:</label>
+          <input type="text" id="customAmount0" class="customPersonAmount" placeholder="Enter amount" required>
+        </div>
+        <button type="button" class="deletePersonButton">×</button>
+      </div>
     </div>
   `;
   
+  // Format default custom amount input
+  const defaultCustomAmount = document.getElementById('customAmount0');
+  if (defaultCustomAmount) {
+    defaultCustomAmount.addEventListener('input', function() {
+      let value = this.value;
+      value = value.replace(/[^\d]/g, '');
+      
+      if (value.length > 0) {
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      }
+      
+      this.value = value;
+    });
+  }
+  
+  // Delete button for default custom person
+  const defaultCustomDeleteBtn = document.querySelector('#customPeopleContainer .deletePersonButton');
+  if (defaultCustomDeleteBtn) {
+    defaultCustomDeleteBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (document.querySelectorAll('.customPersonName').length > 1) {
+        this.closest('.person-input').remove();
+      } else {
+        alert('Must have at least one person');
+      }
+    });
+  }
+  
   customPersonCount = 1;
+}
+
+
+// ===== EXPORT PDF FUNCTIONS =====
+
+// Export Equal Split to PDF
+function exportEqualSplitPDF(names, splitAmount, totalBill) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // Title
+  doc.setFontSize(16);
+  doc.text('Split Bill Calculator - Equal Split', 20, 20);
+  
+  // Date
+  doc.setFontSize(10);
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('id-ID', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  doc.text(`Date: ${dateStr}`, 20, 30);
+  
+  // Table data
+  const tableData = names.map((name, index) => [
+    index + 1,
+    name,
+    `Rp${Math.round(splitAmount).toLocaleString('id-ID')}`
+  ]);
+  
+  // Add total row
+  tableData.push(['', 'TOTAL', `Rp${Math.round(totalBill).toLocaleString('id-ID')}`]);
+  
+  // Generate table
+  doc.autoTable({
+    head: [['No', 'Name', 'Amount']],
+    body: tableData,
+    startY: 40,
+    margin: 20,
+    theme: 'grid',
+    headStyles: {
+      fillColor: [102, 126, 234],
+      textColor: 255,
+      fontStyle: 'bold'
+    },
+    footStyles: {
+      fillColor: [240, 240, 240],
+      textColor: [0, 0, 0],
+      fontStyle: 'bold'
+    }
+  });
+  
+  // Summary section
+  const finalY = doc.lastAutoTable.finalY + 15;
+  doc.setFontSize(12);
+  doc.text('Summary:', 20, finalY);
+  doc.setFontSize(10);
+  doc.text(`Total Bill: Rp${Math.round(totalBill).toLocaleString('id-ID')}`, 20, finalY + 10);
+  doc.text(`Number of People: ${names.length}`, 20, finalY + 20);
+  doc.text(`Amount per person: Rp${Math.round(splitAmount).toLocaleString('id-ID')}`, 20, finalY + 30);
+  
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const year = today.getFullYear();
+  const filename = `equal-split-bill-${day}-${month}-${year}.pdf`;
+
+  doc.save(filename);
+}
+
+// Export Custom Split to PDF
+function exportCustomSplitPDF(names, amounts, totalBill, maxPerson, maxAmount, minPerson, minAmount) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // Title
+  doc.setFontSize(16);
+  doc.text('Split Bill Calculator - Custom Split', 20, 20);
+  
+  // Date
+  doc.setFontSize(10);
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('id-ID', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  doc.text(`Date: ${dateStr}`, 20, 30);
+  
+  // Table data
+  const tableData = names.map((name, index) => [
+    index + 1,
+    name,
+    `Rp${Math.round(amounts[index]).toLocaleString('id-ID')}`
+  ]);
+  
+  // Add total row
+  tableData.push(['', 'TOTAL', `Rp${Math.round(totalBill).toLocaleString('id-ID')}`]);
+  
+  // Generate table
+  doc.autoTable({
+    head: [['No', 'Name', 'Amount']],
+    body: tableData,
+    startY: 40,
+    margin: 20,
+    theme: 'grid',
+    headStyles: {
+      fillColor: [102, 126, 234],
+      textColor: 255,
+      fontStyle: 'bold'
+    },
+    footStyles: {
+      fillColor: [240, 240, 240],
+      textColor: [0, 0, 0],
+      fontStyle: 'bold'
+    }
+  });
+  
+  // Summary section
+  const finalY = doc.lastAutoTable.finalY + 15;
+  doc.setFontSize(12);
+  doc.text('Summary:', 20, finalY);
+  doc.setFontSize(10);
+  doc.text(`Total Bill: Rp${Math.round(totalBill).toLocaleString('id-ID')}`, 20, finalY + 10);
+  doc.text(`Number of People: ${names.length}`, 20, finalY + 20);
+  doc.text(`Most Expensive: ${maxPerson} (Rp${Math.round(maxAmount).toLocaleString('id-ID')})`, 20, finalY + 30);
+  doc.text(`Cheapest: ${minPerson} (Rp${Math.round(minAmount).toLocaleString('id-ID')})`, 20, finalY + 40);
+
+  const day = String(today.getDate()).padStart(2, '0');
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const year = today.getFullYear();
+  const filename = `equal-split-bill-${day}-${month}-${year}.pdf`;
+
+  doc.save(filename);
 }
